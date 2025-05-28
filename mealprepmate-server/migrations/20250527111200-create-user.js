@@ -32,3 +32,7 @@ module.exports = {
     await queryInterface.dropTable('Users');
   }
 };
+
+//20250527111226 user
+
+//20250527111244 meal

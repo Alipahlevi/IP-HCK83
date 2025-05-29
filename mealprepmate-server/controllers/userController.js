@@ -2,8 +2,10 @@ const { User } = require("../models");
 const { hashPassword, comparePassword } = require("../helpers/bcrypt");
 const { signToken } = require("../helpers/jwt");
 const { OAuth2Client } = require("google-auth-library");
+const DiscordOauth2 = require("discord-oauth2");
 
 const client = new OAuth2Client();
+const discord = new DiscordOauth2();
 
 class UserController {
   static async register(req, res, next) {
@@ -264,7 +266,7 @@ class UserController {
 
       if (!password) {
         return res.status(400).json({
-          message: "Password is required to delete account"
+          message: "Password is required to delete account",
         });
       }
 
@@ -277,7 +279,7 @@ class UserController {
       // Verify password before deletion
       if (!comparePassword(password, user.password)) {
         return res.status(400).json({
-          message: "Incorrect password"
+          message: "Incorrect password",
         });
       }
 
@@ -285,9 +287,89 @@ class UserController {
       await user.destroy();
 
       res.json({
-        message: "Account deleted successfully"
+        message: "Account deleted successfully",
       });
     } catch (error) {
+      next(error);
+    }
+  }
+
+  // Discord Login
+  static async discordLogin(req, res, next) {
+    try {
+      const { access_token } = req.body;
+
+      if (!access_token) {
+        return res.status(400).json({
+          message: "Discord access token is required",
+        });
+      }
+
+      // Get user info from Discord
+      const discordUser = await discord.getUser(access_token);
+      console.log("✅ Discord user:", discordUser);
+
+      // Check if user already exists
+      let user = await User.findOne({ where: { email: discordUser.email } });
+
+      if (!user) {
+        // Create new user if doesn't exist
+        user = await User.create({
+          username:
+            discordUser.username ||
+            discordUser.global_name ||
+            `discord_${discordUser.id}`,
+          email: discordUser.email,
+          password: hashPassword(Math.random().toString(36).slice(-8)), // Random password
+          firstName: discordUser.global_name
+            ? discordUser.global_name.split(" ")[0]
+            : "",
+          lastName: discordUser.global_name
+            ? discordUser.global_name.split(" ").slice(1).join(" ")
+            : "",
+          profilePicture: discordUser.avatar
+            ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`
+            : null,
+        });
+
+        const token = signToken({ id: user.id, email: user.email });
+
+        return res.status(201).json({
+          message: "User registered successfully via Discord",
+          user: {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            profilePicture: user.profilePicture,
+          },
+          token,
+        });
+      }
+
+      // User exists, just login
+      const token = signToken({ id: user.id, email: user.email });
+
+      res.status(200).json({
+        message: "Login successful via Discord",
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          bio: user.bio,
+          profilePicture: user.profilePicture,
+        },
+        token,
+      });
+    } catch (error) {
+      console.error("Discord login error:", error);
+      res.status(500).json({
+        message: "Internal Server Error during Discord Login",
+        detail: error.message,
+      });
       next(error);
     }
   }

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "../../services/authService";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 // Async thunks
 export const loginUser = createAsyncThunk(
@@ -46,6 +46,21 @@ export const googleLogin = createAsyncThunk(
   }
 );
 
+export const discordLogin = createAsyncThunk(
+  "auth/discordLogin",
+  async (accessToken, { rejectWithValue }) => {
+    try {
+      const response = await authService.discordLogin(accessToken);
+      localStorage.setItem("token", response.token);
+      return response;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Discord login failed"
+      );
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -80,31 +95,31 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.isAuthenticated = true;
         state.error = null;
-        
+
         // SweetAlert2 notification
         Swal.fire({
-          icon: 'success',
-          title: 'Login Berhasil!',
+          icon: "success",
+          title: "Login Berhasil!",
           text: `Selamat datang kembali, ${action.payload.user.username}!`,
           timer: 2000,
           timerProgressBar: true,
           showConfirmButton: false,
           toast: true,
-          position: 'top-end'
+          position: "top-end",
         });
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.isAuthenticated = false;
-        
+
         // SweetAlert2 error notification
         Swal.fire({
-          icon: 'error',
-          title: 'Login Gagal',
-          text: action.payload || 'Terjadi kesalahan saat login',
-          confirmButtonText: 'OK',
-          confirmButtonColor: '#10b981'
+          icon: "error",
+          title: "Login Gagal",
+          text: action.payload || "Terjadi kesalahan saat login",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#10b981",
         });
       })
       // Register
@@ -136,6 +151,41 @@ const authSlice = createSlice({
       .addCase(googleLogin.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+      });
+
+    // Discord Login
+    builder
+      .addCase(discordLogin.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(discordLogin.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+        state.error = null;
+
+        Swal.fire({
+          icon: "success",
+          title: "Login Berhasil!",
+          text: `Selamat datang, ${action.payload.user.username}!`,
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+          toast: true,
+          position: "top-end",
+        });
+      })
+      .addCase(discordLogin.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+
+        Swal.fire({
+          icon: "error",
+          title: "Login Discord Gagal",
+          text: action.payload || "Terjadi kesalahan saat login dengan Discord",
+          confirmButtonColor: "#ef4444",
+        });
       });
   },
 });

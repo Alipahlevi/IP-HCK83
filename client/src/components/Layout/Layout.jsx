@@ -24,15 +24,28 @@ const Layout = ({ children }) => {
 
   const containerStyle = {
     minHeight: '100vh',
-    background: 'linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%)'
+    background: 'var(--gradient-luxury)'
   };
 
-  const navStyle = {
-    background: 'white',
-    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-    borderBottom: '4px solid #10b981'
+  const luxuryNavStyle = {
+    background: 'rgba(255, 255, 255, 0.95)',
+    backdropFilter: 'blur(20px)',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+    boxShadow: 'var(--shadow-premium)',
+    position: 'sticky',
+    top: 0,
+    zIndex: 1000
   };
-
+  
+  const logoStyle = {
+    fontSize: '1.75rem',
+    fontWeight: '800',
+    background: 'var(--gradient-luxury)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text',
+    fontFamily: 'Playfair Display, serif'
+  };
   const activeNavStyle = {
     background: 'linear-gradient(135deg, #dcfce7, #bbf7d0)',
     color: '#15803d',
@@ -61,7 +74,7 @@ const Layout = ({ children }) => {
   return (
     <div style={containerStyle}>
       {/* Navigation */}
-      <nav style={navStyle}>
+      <nav style={luxuryNavStyle}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', height: '4rem', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>

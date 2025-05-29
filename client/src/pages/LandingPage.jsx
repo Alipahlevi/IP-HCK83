@@ -10,44 +10,45 @@ const LandingPage = () => {
   }
 
   const gradientStyle = {
-    background: 'linear-gradient(135deg, #10b981 0%, #3b82f6 50%, #8b5cf6 100%)',
+    background: 'var(--gradient-luxury)',
     minHeight: '100vh'
   };
 
   const cardStyle = {
     background: 'rgba(255, 255, 255, 0.95)',
-    backdropFilter: 'blur(10px)',
-    borderRadius: '1rem',
-    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+    backdropFilter: 'blur(20px)',
+    borderRadius: '1.5rem',
+    boxShadow: 'var(--shadow-luxury)',
     transition: 'all 0.3s ease',
     border: '1px solid rgba(255, 255, 255, 0.2)'
   };
 
   const buttonPrimaryStyle = {
-    background: 'linear-gradient(135deg, #10b981, #059669)',
+    background: 'var(--gradient-premium)',
     color: 'white',
-    padding: '1rem 2rem',
-    borderRadius: '0.75rem',
-    fontWeight: '600',
+    padding: '1.25rem 2.5rem',
+    borderRadius: '1rem',
+    fontWeight: '700',
     border: 'none',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
-    boxShadow: '0 10px 15px -3px rgba(16, 185, 129, 0.3)',
+    boxShadow: 'var(--shadow-premium)',
     transform: 'translateY(0)',
-    fontSize: '1.125rem'
+    fontSize: '1.25rem',
+    fontFamily: 'Inter, sans-serif'
   };
 
   const buttonSecondaryStyle = {
-    background: 'rgba(255, 255, 255, 0.2)',
-    backdropFilter: 'blur(10px)',
+    background: 'rgba(255, 255, 255, 0.15)',
+    backdropFilter: 'blur(15px)',
     color: 'white',
-    padding: '1rem 2rem',
-    borderRadius: '0.75rem',
+    padding: '1.25rem 2.5rem',
+    borderRadius: '1rem',
     fontWeight: '600',
     border: '1px solid rgba(255, 255, 255, 0.3)',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
-    fontSize: '1.125rem'
+    fontSize: '1.25rem'
   };
 
   return (
@@ -281,3 +282,38 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
+
+
+// Tambahkan di bagian hero section
+const heroStyle = {
+  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+  minHeight: '100vh',
+  position: 'relative',
+  overflow: 'hidden'
+};
+
+const luxuryCardStyle = {
+  background: 'rgba(255, 255, 255, 0.1)',
+  backdropFilter: 'blur(20px)',
+  borderRadius: '2rem',
+  border: '1px solid rgba(255, 255, 255, 0.2)',
+  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+  padding: '3rem',
+  position: 'relative',
+  overflow: 'hidden'
+};
+
+// Tambahkan floating elements
+const FloatingElement = ({ delay = 0, size = 60 }) => (
+  <div
+    style={{
+      position: 'absolute',
+      width: `${size}px`,
+      height: `${size}px`,
+      background: 'rgba(255, 255, 255, 0.1)',
+      borderRadius: '50%',
+      animation: `luxuryFloat 3s ease-in-out infinite ${delay}s`,
+      backdropFilter: 'blur(10px)'
+    }}
+  />
+);

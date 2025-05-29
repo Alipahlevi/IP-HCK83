@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router';
-import { loginUser, googleLogin, clearError } from '../store/slices/authSlice';
-import Swal from 'sweetalert2';
-
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router";
+import {
+  loginUser,
+  googleLogin,
+  discordLogin,
+  clearError,
+} from "../store/slices/authSlice";
+import Swal from "sweetalert2";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +15,7 @@ const LoginPage = () => {
     password: "",
   });
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isDiscordLoading, setIsDiscordLoading] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -96,95 +101,95 @@ const LoginPage = () => {
   }, [dispatch]);
 
   const [fieldErrors, setFieldErrors] = useState({});
-  
+
   const validateField = (name, value) => {
     const errors = { ...fieldErrors };
-    
+
     switch (name) {
-      case 'email':
+      case "email":
         if (!value) {
-          errors.email = 'Email harus diisi';
+          errors.email = "Email harus diisi";
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-          errors.email = 'Format email tidak valid';
+          errors.email = "Format email tidak valid";
         } else {
           delete errors.email;
         }
         break;
-      case 'password':
+      case "password":
         if (!value) {
-          errors.password = 'Password harus diisi';
+          errors.password = "Password harus diisi";
         } else if (value.length < 6) {
-          errors.password = 'Password minimal 6 karakter';
+          errors.password = "Password minimal 6 karakter";
         } else {
           delete errors.password;
         }
         break;
     }
-    
+
     setFieldErrors(errors);
   };
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
-    
+
     // Validasi real-time
     validateField(name, value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validasi required fields
     if (!formData.email || !formData.password) {
       await Swal.fire({
-        icon: 'warning',
-        title: 'Form Tidak Lengkap',
-        text: 'Silakan isi semua field yang diperlukan.',
+        icon: "warning",
+        title: "Form Tidak Lengkap",
+        text: "Silakan isi semua field yang diperlukan.",
         html: `
           <div style="text-align: left; margin-top: 10px;">
-            ${!formData.email ? '<p>• Email harus diisi</p>' : ''}
-            ${!formData.password ? '<p>• Password harus diisi</p>' : ''}
+            ${!formData.email ? "<p>• Email harus diisi</p>" : ""}
+            ${!formData.password ? "<p>• Password harus diisi</p>" : ""}
           </div>
         `,
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#10b981',
+        confirmButtonText: "OK",
+        confirmButtonColor: "#10b981",
         customClass: {
-          popup: 'swal-custom-popup',
-          title: 'swal-custom-title'
-        }
+          popup: "swal-custom-popup",
+          title: "swal-custom-title",
+        },
       });
       return;
     }
-    
+
     // Validasi format email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       await Swal.fire({
-        icon: 'error',
-        title: 'Format Email Salah',
-        text: 'Silakan masukkan email dengan format yang benar.',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#10b981'
+        icon: "error",
+        title: "Format Email Salah",
+        text: "Silakan masukkan email dengan format yang benar.",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#10b981",
       });
       return;
     }
-    
+
     // Validasi panjang password minimum
     if (formData.password.length < 6) {
       await Swal.fire({
-        icon: 'error',
-        title: 'Password Terlalu Pendek',
-        text: 'Password harus minimal 6 karakter.',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#10b981'
+        icon: "error",
+        title: "Password Terlalu Pendek",
+        text: "Password harus minimal 6 karakter.",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#10b981",
       });
       return;
     }
-    
+
     dispatch(loginUser(formData));
   };
 
@@ -199,17 +204,17 @@ const LoginPage = () => {
       const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
       if (!clientId) {
         await Swal.fire({
-          icon: 'warning',
-          title: 'Konfigurasi Tidak Lengkap',
-          text: 'Google Client ID tidak ditemukan. Silakan gunakan email dan password.',
-          confirmButtonText: 'OK',
-          confirmButtonColor: '#10b981'
+          icon: "warning",
+          title: "Konfigurasi Tidak Lengkap",
+          text: "Google Client ID tidak ditemukan. Silakan gunakan email dan password.",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#10b981",
         });
         return;
       }
 
       // Load Google Identity Services jika belum ada
-      if (typeof window.google === 'undefined') {
+      if (typeof window.google === "undefined") {
         await loadGoogleScript();
       }
 
@@ -223,25 +228,25 @@ const LoginPage = () => {
       });
 
       // Render button langsung tanpa prompt
-      const buttonDiv = document.getElementById('google-signin-button');
+      const buttonDiv = document.getElementById("google-signin-button");
       if (buttonDiv) {
-        buttonDiv.style.display = 'block';
+        buttonDiv.style.display = "block";
         window.google.accounts.id.renderButton(buttonDiv, {
-          theme: 'outline',
-          size: 'large',
-          width: '100%',
-          text: 'signin_with',
-          shape: 'rectangular',
+          theme: "outline",
+          size: "large",
+          width: "100%",
+          text: "signin_with",
+          shape: "rectangular",
         });
       }
     } catch (error) {
-      console.error('Google Sign In Error:', error);
+      console.error("Google Sign In Error:", error);
       await Swal.fire({
-        icon: 'error',
-        title: 'Gagal Memuat Google Sign In',
-        text: 'Silakan coba lagi atau gunakan email/password.',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#10b981'
+        icon: "error",
+        title: "Gagal Memuat Google Sign In",
+        text: "Silakan coba lagi atau gunakan email/password.",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#10b981",
       });
     } finally {
       setIsGoogleLoading(false);
@@ -285,6 +290,67 @@ const LoginPage = () => {
   useEffect(() => {
     loadGoogleScript().catch(console.error);
   }, []);
+
+  // Discord Login Handler
+  const handleDiscordLogin = () => {
+    setIsDiscordLoading(true);
+
+    const clientId = process.env.REACT_APP_DISCORD_CLIENT_ID;
+    const redirectUri = encodeURIComponent(
+      window.location.origin + "/auth/discord/callback"
+    );
+    const scope = encodeURIComponent("identify email");
+
+    const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
+
+    // Open Discord OAuth in popup
+    const popup = window.open(
+      discordAuthUrl,
+      "discord-login",
+      "width=500,height=600,scrollbars=yes,resizable=yes"
+    );
+
+    // Listen for popup messages
+    const handleMessage = (event) => {
+      if (event.origin !== window.location.origin) return;
+
+      if (event.data.type === "DISCORD_AUTH_SUCCESS") {
+        popup.close();
+        dispatch(discordLogin(event.data.accessToken))
+          .unwrap()
+          .then(() => {
+            navigate("/");
+          })
+          .catch((error) => {
+            console.error("Discord login failed:", error);
+          })
+          .finally(() => {
+            setIsDiscordLoading(false);
+          });
+      } else if (event.data.type === "DISCORD_AUTH_ERROR") {
+        popup.close();
+        setIsDiscordLoading(false);
+        Swal.fire({
+          icon: "error",
+          title: "Discord Login Gagal",
+          text:
+            event.data.error || "Terjadi kesalahan saat login dengan Discord",
+          confirmButtonColor: "#ef4444",
+        });
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    // Check if popup was closed manually
+    const checkClosed = setInterval(() => {
+      if (popup.closed) {
+        clearInterval(checkClosed);
+        window.removeEventListener("message", handleMessage);
+        setIsDiscordLoading(false);
+      }
+    }, 1000);
+  };
 
   return (
     <div style={containerStyle}>
@@ -377,7 +443,6 @@ const LoginPage = () => {
                 name="email"
                 type="email"
                 autoComplete="email"
-      
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Enter your email"
@@ -412,7 +477,6 @@ const LoginPage = () => {
                 name="password"
                 type="password"
                 autoComplete="current-password"
-              
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Enter your password"

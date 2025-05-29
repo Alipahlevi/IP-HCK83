@@ -17,6 +17,13 @@ const authService = {
     });
     return response.data;
   },
+
+  discordLogin: async (accessToken) => {
+    const response = await api.post("/users/discord-login", {
+      access_token: accessToken,
+    });
+    return response.data;
+  },
 };
 
 export default authService;

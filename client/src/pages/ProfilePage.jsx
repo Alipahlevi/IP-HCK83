@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import Swal from 'sweetalert2';
-import { getUserProfile, updateUserProfile, deleteUser } from "../store/slices/userSlice";
+import Swal from "sweetalert2";
+import {
+  getUserProfile,
+  updateUserProfile,
+  deleteUser,
+} from "../store/slices/userSlice";
 import { logout } from "../store/slices/authSlice";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 
@@ -191,10 +195,10 @@ const ProfilePage = () => {
   useEffect(() => {
     if (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Error!',
+        icon: "error",
+        title: "Error!",
         text: error,
-        confirmButtonColor: '#10b981',
+        confirmButtonColor: "#10b981",
       });
     }
   }, [error]);
@@ -210,17 +214,17 @@ const ProfilePage = () => {
     e.preventDefault();
     try {
       await dispatch(updateUserProfile(formData)).unwrap();
-      
+
       // Success alert with SweetAlert2
       Swal.fire({
-        icon: 'success',
-        title: 'Success!',
-        text: 'Profile updated successfully!',
-        confirmButtonColor: '#10b981',
+        icon: "success",
+        title: "Success!",
+        text: "Profile updated successfully!",
+        confirmButtonColor: "#10b981",
         timer: 3000,
         timerProgressBar: true,
       });
-      
+
       setIsEditing(false);
     } catch (error) {
       console.error("Failed to update profile:", error);
@@ -242,57 +246,57 @@ const ProfilePage = () => {
 
   const handleDeleteAccount = async () => {
     const { value: password } = await Swal.fire({
-      title: '⚠️ Delete Account',
+      title: "⚠️ Delete Account",
       html: `
         <p style="margin-bottom: 20px; color: #374151;">This action cannot be undone. Please enter your password to confirm.</p>
         <input type="password" id="password" class="swal2-input" placeholder="Enter your password" style="margin-top: 10px;">
       `,
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonText: 'Delete Account',
-      cancelButtonText: 'Cancel',
-      confirmButtonColor: '#ef4444',
-      cancelButtonColor: '#6b7280',
+      confirmButtonText: "Delete Account",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#6b7280",
       focusConfirm: false,
       preConfirm: () => {
-        const password = document.getElementById('password').value;
+        const password = document.getElementById("password").value;
         if (!password) {
-          Swal.showValidationMessage('Password is required');
+          Swal.showValidationMessage("Password is required");
           return false;
         }
         return password;
-      }
+      },
     });
 
     if (password) {
       try {
         // Show loading
         Swal.fire({
-          title: 'Deleting Account...',
+          title: "Deleting Account...",
           allowOutsideClick: false,
           didOpen: () => {
             Swal.showLoading();
-          }
+          },
         });
 
         await dispatch(deleteUser({ password })).unwrap();
-        
+
         // Success message
         await Swal.fire({
-          icon: 'success',
-          title: 'Account Deleted',
-          text: 'Your account has been successfully deleted.',
-          confirmButtonColor: '#10b981',
+          icon: "success",
+          title: "Account Deleted",
+          text: "Your account has been successfully deleted.",
+          confirmButtonColor: "#10b981",
         });
-        
+
         dispatch(logout());
         navigate("/login");
       } catch (error) {
         Swal.fire({
-          icon: 'error',
-          title: 'Delete Failed',
-          text: error || 'Failed to delete account. Please try again.',
-          confirmButtonColor: '#10b981',
+          icon: "error",
+          title: "Delete Failed",
+          text: error || "Failed to delete account. Please try again.",
+          confirmButtonColor: "#10b981",
         });
       }
     }
@@ -389,7 +393,14 @@ const ProfilePage = () => {
         {/* Edit Button */}
         {!isEditing && (
           <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-            <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
+            <div
+              style={{
+                display: "flex",
+                gap: "1rem",
+                justifyContent: "center",
+                flexWrap: "wrap",
+              }}
+            >
               <button
                 onClick={() => setIsEditing(true)}
                 style={buttonPrimaryStyle}
@@ -452,7 +463,6 @@ const ProfilePage = () => {
                     e.target.style.boxShadow = "none";
                   }
                 }}
-                required
               />
             </div>
 
@@ -479,7 +489,6 @@ const ProfilePage = () => {
                     e.target.style.boxShadow = "none";
                   }
                 }}
-                required
               />
             </div>
 

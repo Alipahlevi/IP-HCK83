@@ -1,45 +1,51 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import userService from '../../services/userService';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import userService from "../../services/userService";
 
 // Async thunks
 export const getUserProfile = createAsyncThunk(
-  'user/getProfile',
+  "user/getProfile",
   async (_, { rejectWithValue }) => {
     try {
       const response = await userService.getProfile();
       return response;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to fetch profile');
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch profile"
+      );
     }
   }
 );
 
 export const updateUserProfile = createAsyncThunk(
-  'user/updateProfile',
+  "user/updateProfile",
   async (profileData, { rejectWithValue }) => {
     try {
       const response = await userService.updateProfile(profileData);
       return response;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to update profile');
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update profile"
+      );
     }
   }
 );
 
 export const deleteUser = createAsyncThunk(
-  'user/deleteUser',
+  "user/deleteUser",
   async (passwordData, { rejectWithValue }) => {
     try {
       const response = await userService.deleteUser(passwordData);
       return response;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to delete account');
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to delete account"
+      );
     }
   }
 );
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState: {
     profile: null,
     isLoading: false,

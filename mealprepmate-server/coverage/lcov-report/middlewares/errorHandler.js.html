@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">22.22% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -79,33 +79,33 @@
 <a name='L14'></a><a href='#L14'>14</a>
 <a name='L15'></a><a href='#L15'>15</a>
 <a name='L16'></a><a href='#L16'>16</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span></td><td class="text"><pre class="prettyprint lang-js">const errorHandler = <span class="fstat-no" title="function not covered" >(e</span>rr, req, res, next) =&gt; {
-<span class="cstat-no" title="statement not covered" >  console.error(err.stack);</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span></td><td class="text"><pre class="prettyprint lang-js">const errorHandler = (err, req, res, next) =&gt; {
+  console.error(err.stack);
   
-<span class="cstat-no" title="statement not covered" >  if (err.name === 'SequelizeValidationError') {</span>
-    const errors = <span class="cstat-no" title="statement not covered" >err.errors.map(<span class="fstat-no" title="function not covered" >er</span>ror =&gt; <span class="cstat-no" title="statement not covered" >error.message)</span>;</span>
-<span class="cstat-no" title="statement not covered" >    return res.status(400).json({ message: 'Validation error', errors });</span>
+  if (err.name === 'SequelizeValidationError') {
+    const errors = err.errors.map(error =&gt; error.message);
+    return res.status(400).json({ message: 'Validation error', errors });
   }
   
-<span class="cstat-no" title="statement not covered" >  if (err.name === 'SequelizeUniqueConstraintError') {</span>
-<span class="cstat-no" title="statement not covered" >    return res.status(400).json({ message: 'Data already exists' });</span>
+  if (err.name === 'SequelizeUniqueConstraintError') {
+    return res.status(400).json({ message: 'Data already exists' });
   }
   
-<span class="cstat-no" title="statement not covered" >  res.status(500).json({ message: 'Internal server error' });</span>
+  res.status(500).json({ message: 'Internal server error' });
 };
 &nbsp;
 module.exports = errorHandler;</pre></td></tr></table></pre>
@@ -115,7 +115,7 @@ module.exports = errorHandler;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-29T08:09:20.658Z
+                at 2025-05-29T19:00:44.986Z
             </div>
         <script src="../prettify.js"></script>
         <script>

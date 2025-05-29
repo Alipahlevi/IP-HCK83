@@ -11,6 +11,11 @@ beforeAll(async () => {
   await sequelize.sync({ force: true });
 });
 
+beforeEach(async () => {
+  // Bersihkan semua tabel sebelum setiap test
+  await sequelize.truncate({ cascade: true, restartIdentity: true });
+});
+
 afterAll(async () => {
   await sequelize.close();
 });

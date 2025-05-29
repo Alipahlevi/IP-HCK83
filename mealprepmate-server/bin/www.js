@@ -1,8 +1,8 @@
 const port = process.env.PORT || 3000;
-const app = require('../app');
+const app = require("../app");
 
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
 }
 
 app.listen(port, () => {

@@ -28,17 +28,7 @@ app.get("/health", (req, res) => {
   res.json({ status: "OK", message: "MealPrepMate Server is running!" });
 });
 
-// Start server
-if (process.env.NODE_ENV !== "test") {
-  app.listen(PORT, async () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-    try {
-      await sequelize.authenticate();
-      console.log("✅ Database connected successfully");
-    } catch (error) {
-      console.error("❌ Database connection failed:", error);
-    }
-  });
-}
+
+
 
 module.exports = app;

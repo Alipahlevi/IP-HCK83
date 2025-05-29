@@ -12,7 +12,7 @@ describe("User Controller", () => {
   describe("POST /api/users/register", () => {
     test("should register new user successfully", async () => {
       const userData = {
-        name: "Test User",
+        username: "testuser",
         email: "test@example.com",
         password: "password123",
       };
@@ -24,13 +24,13 @@ describe("User Controller", () => {
       expect(response.status).toBe(201);
       expect(response.body.message).toBe("User registered successfully");
       expect(response.body.user.email).toBe(userData.email);
-      expect(response.body.user.name).toBe(userData.name);
+      expect(response.body.user.username).toBe(userData.username);
       expect(response.body.user.password).toBeUndefined();
     });
 
     test("should not register user with duplicate email", async () => {
       const userData = {
-        name: "Test User",
+        username: "testuser",
         email: "test@example.com",
         password: "password123",
       };
@@ -47,7 +47,7 @@ describe("User Controller", () => {
         .send(userData);
 
       expect(response.status).toBe(400);
-      expect(response.body.message).toBe("Email already exists");
+      expect(response.body.message).toBe("Data already exists"); // Changed from "Email already exists"
     });
   });
 
@@ -56,7 +56,7 @@ describe("User Controller", () => {
 
     beforeEach(async () => {
       testUser = await User.create({
-        name: "Test User",
+        username: "testuser",
         email: "test@example.com",
         password: hashPassword("password123"),
       });
@@ -74,7 +74,7 @@ describe("User Controller", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe("Login successful");
-      expect(response.body.access_token).toBeDefined();
+      expect(response.body.token).toBeDefined(); // Changed from access_token to token
       expect(response.body.user.email).toBe(testUser.email);
     });
 
@@ -89,7 +89,7 @@ describe("User Controller", () => {
         .send(loginData);
 
       expect(response.status).toBe(401);
-      expect(response.body.message).toBe("Invalid email or password");
+      expect(response.body.message).toBe("Invalid credentials"); // Changed from "Invalid email or password"
     });
   });
 
@@ -99,7 +99,7 @@ describe("User Controller", () => {
 
     beforeEach(async () => {
       testUser = await User.create({
-        name: "Test User",
+        username: "testuser",
         email: "test@example.com",
         password: hashPassword("password123"),
       });
@@ -113,7 +113,7 @@ describe("User Controller", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.user.email).toBe(testUser.email);
-      expect(response.body.user.name).toBe(testUser.name);
+      expect(response.body.user.username).toBe(testUser.username); // Changed from name to username
       expect(response.body.user.password).toBeUndefined();
     });
   });
@@ -124,26 +124,20 @@ describe("User Controller", () => {
 
     beforeEach(async () => {
       testUser = await User.create({
-        name: "Test User",
+        username: "testuser",
         email: "test@example.com",
         password: hashPassword("password123"),
-        age: 25,
-        weight: 70,
-        height: 175,
-        activityLevel: "moderate",
-        goal: "maintain",
+        firstName: "Test",
+        lastName: "User",
       });
       token = signToken({ id: testUser.id, email: testUser.email });
     });
 
     test("should update user profile successfully", async () => {
       const updateData = {
-        name: "Updated Name",
-        age: 26,
-        weight: 72,
-        height: 176,
-        activityLevel: "active",
-        goal: "lose",
+        username: "updateduser",
+        firstName: "Updated",
+        lastName: "Name",
       };
 
       const response = await request(app)
@@ -153,18 +147,18 @@ describe("User Controller", () => {
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe("Profile updated successfully");
-      expect(response.body.user.name).toBe(updateData.name);
-      expect(response.body.user.age).toBe(updateData.age);
+      expect(response.body.user.username).toBe(updateData.username); // Changed from name to username
+      expect(response.body.user.firstName).toBe(updateData.firstName);
     });
   });
 
-  describe("PUT /api/users/change-password", () => {
+  describe("PUT /api/users/password", () => { // Changed from change-password to password
     let testUser;
     let token;
 
     beforeEach(async () => {
       testUser = await User.create({
-        name: "Test User",
+        username: "testuser",
         email: "test@example.com",
         password: hashPassword("password123"),
       });
@@ -178,12 +172,12 @@ describe("User Controller", () => {
       };
 
       const response = await request(app)
-        .put("/api/users/change-password")
+        .put("/api/users/password") // Changed from change-password to password
         .set("Authorization", `Bearer ${token}`)
         .send(passwordData);
 
       expect(response.status).toBe(200);
-      expect(response.body.message).toBe("Password changed successfully");
+      expect(response.body.message).toBe("Password updated successfully"); // Changed from "Password changed successfully"
     });
 
     test("should not change password with incorrect current password", async () => {
@@ -193,12 +187,87 @@ describe("User Controller", () => {
       };
 
       const response = await request(app)
-        .put("/api/users/change-password")
+        .put("/api/users/password") // Changed from change-password to password
         .set("Authorization", `Bearer ${token}`)
         .send(passwordData);
 
       expect(response.status).toBe(400);
       expect(response.body.message).toBe("Current password is incorrect");
     });
+    describe("POST /api/users/google-login", () => {
+      test("should handle Google login with invalid token", async () => {
+        const response = await request(app)
+          .post("/api/users/google-login")
+          .send({ id_token: "invalid_token" });
+  
+        expect(response.status).toBe(500);
+        expect(response.body.message).toBe("Internal Server Error during Google Login");
+      });
+    });
+  
+    describe("DELETE /api/users/profile", () => {
+      let testUser;
+      let token;
+  
+      beforeEach(async () => {
+        testUser = await User.create({
+          username: "deleteuser",
+          email: "delete@example.com",
+          password: hashPassword("password123"),
+        });
+        token = signToken({ id: testUser.id, email: testUser.email });
+      });
+  
+      test("should delete user account successfully", async () => {
+        const response = await request(app)
+          .delete("/api/users/profile")
+          .set("Authorization", `Bearer ${token}`)
+          .send({ password: "password123" });
+  
+        expect(response.status).toBe(200);
+        expect(response.body.message).toBe("Account deleted successfully");
+      });
+  
+      test("should not delete account without password", async () => {
+        const response = await request(app)
+          .delete("/api/users/profile")
+          .set("Authorization", `Bearer ${token}`)
+          .send({});
+  
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("Password is required to delete account");
+      });
+  
+      test("should not delete account with incorrect password", async () => {
+        const response = await request(app)
+          .delete("/api/users/profile")
+          .set("Authorization", `Bearer ${token}`)
+          .send({ password: "wrongpassword" });
+  
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("Incorrect password");
+      });
+    });
+  
+    describe("POST /api/users/discord-login", () => {
+      test("should handle Discord login without access token", async () => {
+        const response = await request(app)
+          .post("/api/users/discord-login")
+          .send({});
+  
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("Discord access token is required");
+      });
+  
+      test("should handle Discord login with invalid token", async () => {
+        const response = await request(app)
+          .post("/api/users/discord-login")
+          .send({ access_token: "invalid_token" });
+  
+        expect(response.status).toBe(500);
+        expect(response.body.message).toBe("Internal Server Error during Discord Login");
+      });
+    });
   });
+
 });

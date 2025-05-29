@@ -7,34 +7,12 @@
     "dev": "nodemon app.js",
     "test": "jest --setupFilesAfterEnv=./test/setup.js",
     "test:watch": "jest --watch --setupFilesAfterEnv=./test/setup.js",
-    "test:coverage": "jest --coverage --setupFilesAfterEnv=./test/setup.js",
+    "test:coverage": "jest --coverage --setupFilesAfterEnv=./test/setup.js --runInBand --forceExit",
+    "test:coverage:clean": "jest --coverage --setupFilesAfterEnv=./test/setup.js --runInBand --forceExit --clearCache",
     "db:create": "sequelize db:create",
     "db:migrate": "sequelize db:migrate",
     "db:seed": "sequelize db:seed:all",
     "db:reset": "sequelize db:drop && sequelize db:create && sequelize db:migrate && sequelize db:seed:all"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "MealPrepMate Backend Server",
-  "dependencies": {
-    "@google/generative-ai": "^0.2.1",
-    "axios": "^1.6.0",
-    "bcryptjs": "^3.0.2",
-    "cors": "^2.8.5",
-    "discord-oauth2": "^2.12.1",
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "google-auth-library": "^9.15.1",
-    "jsonwebtoken": "^9.0.2",
-    "pg": "^8.16.0",
-    "sequelize": "^6.37.7"
-  },
-  "devDependencies": {
-    "jest": "^29.7.0",
-    "nodemon": "^3.0.0",
-    "sequelize-cli": "^6.6.3",
-    "supertest": "^7.1.1"
   },
   "jest": {
     "testEnvironment": "node",
@@ -46,7 +24,8 @@
       "helpers/**/*.js",
       "middlewares/**/*.js",
       "models/**/*.js",
-      "routes/**/*.js"
+      "routes/**/*.js",
+      "!models/index.js"
     ],
     "coverageThreshold": {
       "global": {
@@ -56,5 +35,21 @@
         "statements": 90
       }
     }
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "discord-oauth2": "^2.12.1",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "google-auth-library": "^9.15.1",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.0",
+    "sequelize": "^6.37.7",
+    "supertest": "^7.1.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }

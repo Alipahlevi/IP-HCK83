@@ -17,6 +17,7 @@ describe("Authentication Middleware", () => {
 
   beforeEach(async () => {
     testUser = await User.create({
+      username: "testuser",
       email: "test@example.com",
       password: "hashedpassword",
       name: "Test User",
@@ -25,7 +26,7 @@ describe("Authentication Middleware", () => {
   });
 
   afterEach(async () => {
-    await User.destroy({ where: {} });
+    await User.destroy({ where: {}, truncate: true, cascade: true });
   });
 
   test("should allow access with valid token", async () => {
@@ -42,7 +43,7 @@ describe("Authentication Middleware", () => {
     const response = await request(app).get("/protected");
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Access token is required");
+    expect(response.body.message).toBe("Access token required");
   });
 
   test("should deny access with malformed token", async () => {
@@ -51,7 +52,7 @@ describe("Authentication Middleware", () => {
       .set("Authorization", "InvalidToken");
 
     expect(response.status).toBe(401);
-    expect(response.body.message).toBe("Access token is required");
+    expect(response.body.message).toBe("Access token required");
   });
 
   test("should deny access with invalid token", async () => {

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "../../services/authService";
+import Swal from 'sweetalert2';
 
 // Async thunks
 export const loginUser = createAsyncThunk(
@@ -68,20 +69,43 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Login
+      // Login cases
       .addCase(loginUser.pending, (state) => {
-        state.isLoading = true;
+        state.loading = true;
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.loading = false;
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
+        state.error = null;
+        
+        // SweetAlert2 notification
+        Swal.fire({
+          icon: 'success',
+          title: 'Login Berhasil!',
+          text: `Selamat datang kembali, ${action.payload.user.username}!`,
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+          toast: true,
+          position: 'top-end'
+        });
       })
       .addCase(loginUser.rejected, (state, action) => {
-        state.isLoading = false;
+        state.loading = false;
         state.error = action.payload;
+        state.isAuthenticated = false;
+        
+        // SweetAlert2 error notification
+        Swal.fire({
+          icon: 'error',
+          title: 'Login Gagal',
+          text: action.payload || 'Terjadi kesalahan saat login',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#10b981'
+        });
       })
       // Register
       .addCase(registerUser.pending, (state) => {

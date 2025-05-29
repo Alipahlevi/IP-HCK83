@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
 import { registerUser, clearError } from '../store/slices/authSlice';
+import Swal from 'sweetalert2';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -85,21 +86,122 @@ const RegisterPage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (formData.password !== formData.confirmPassword) {
-      setPasswordError('Passwords do not match');
+    // Validasi required fields
+    const requiredFields = {
+      username: 'Username',
+      email: 'Email',
+      password: 'Password',
+      confirmPassword: 'Konfirmasi Password'
+    };
+    
+    const emptyFields = [];
+    Object.keys(requiredFields).forEach(field => {
+      if (!formData[field] || formData[field].trim() === '') {
+        emptyFields.push(requiredFields[field]);
+      }
+    });
+    
+    if (emptyFields.length > 0) {
+      await Swal.fire({
+        icon: 'warning',
+        title: 'Form Tidak Lengkap',
+        html: `
+          <div style="text-align: left; margin-top: 10px;">
+            <p>Field berikut harus diisi:</p>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+              ${emptyFields.map(field => `<li>${field}</li>`).join('')}
+            </ul>
+          </div>
+        `,
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#8b5cf6',
+        customClass: {
+          popup: 'swal-custom-popup',
+          title: 'swal-custom-title'
+        }
+      });
       return;
     }
     
+    // Validasi format email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      await Swal.fire({
+        icon: 'error',
+        title: 'Format Email Salah',
+        text: 'Silakan masukkan email dengan format yang benar (contoh: user@example.com).',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#8b5cf6'
+      });
+      return;
+    }
+    
+    // Validasi username (minimal 3 karakter, hanya huruf, angka, underscore)
+    if (formData.username.length < 3) {
+      await Swal.fire({
+        icon: 'error',
+        title: 'Username Terlalu Pendek',
+        text: 'Username harus minimal 3 karakter.',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#8b5cf6'
+      });
+      return;
+    }
+    
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
+    if (!usernameRegex.test(formData.username)) {
+      await Swal.fire({
+        icon: 'error',
+        title: 'Format Username Salah',
+        text: 'Username hanya boleh mengandung huruf, angka, dan underscore (_).',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#8b5cf6'
+      });
+      return;
+    }
+    
+    // Validasi password
     if (formData.password.length < 6) {
-      setPasswordError('Password must be at least 6 characters');
+      await Swal.fire({
+        icon: 'error',
+        title: 'Password Terlalu Pendek',
+        text: 'Password harus minimal 6 karakter.',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#8b5cf6'
+      });
+      return;
+    }
+    
+    // Validasi konfirmasi password
+    if (formData.password !== formData.confirmPassword) {
+      await Swal.fire({
+        icon: 'error',
+        title: 'Password Tidak Cocok',
+        text: 'Password dan konfirmasi password harus sama.',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#8b5cf6'
+      });
       return;
     }
     
     const { confirmPassword, ...registerData } = formData;
-    dispatch(registerUser(registerData));
+    const result = await dispatch(registerUser(registerData));
+    
+    if (registerUser.fulfilled.match(result)) {
+      await Swal.fire({
+        icon: 'success',
+        title: 'Registrasi Berhasil!',
+        text: 'Akun Anda telah berhasil dibuat. Selamat datang di MealPrepMate!',
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: true,
+        confirmButtonText: 'Lanjutkan',
+        confirmButtonColor: '#8b5cf6'
+      });
+    }
   };
 
   return (
@@ -195,7 +297,7 @@ const RegisterPage = () => {
                 id="username"
                 name="username"
                 type="text"
-                required
+            
                 value={formData.username}
                 onChange={handleChange}
                 placeholder="Choose a username"
@@ -226,7 +328,7 @@ const RegisterPage = () => {
                 name="email"
                 type="email"
                 autoComplete="email"
-                required
+             
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Enter your email"
@@ -257,7 +359,7 @@ const RegisterPage = () => {
                 name="password"
                 type="password"
                 autoComplete="new-password"
-                required
+             
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Create a password (min. 6 characters)"
@@ -288,7 +390,7 @@ const RegisterPage = () => {
                 name="confirmPassword"
                 type="password"
                 autoComplete="new-password"
-                required
+             
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Confirm your password"

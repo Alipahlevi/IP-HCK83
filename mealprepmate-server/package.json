@@ -5,8 +5,9 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "jest --coverage",
-    "test:watch": "jest --watch",
+    "test": "jest --setupFilesAfterEnv=./test/setup.js",
+    "test:watch": "jest --watch --setupFilesAfterEnv=./test/setup.js",
+    "test:coverage": "jest --coverage --setupFilesAfterEnv=./test/setup.js",
     "db:create": "sequelize db:create",
     "db:migrate": "sequelize db:migrate",
     "db:seed": "sequelize db:seed:all",
@@ -36,11 +37,15 @@
   },
   "jest": {
     "testEnvironment": "node",
+    "testMatch": [
+      "**/test/**/*.test.js"
+    ],
     "collectCoverageFrom": [
-      "**/*.js",
-      "!**/node_modules/**",
-      "!**/migrations/**",
-      "!**/config/**"
+      "controllers/**/*.js",
+      "helpers/**/*.js",
+      "middlewares/**/*.js",
+      "models/**/*.js",
+      "routes/**/*.js"
     ],
     "coverageThreshold": {
       "global": {

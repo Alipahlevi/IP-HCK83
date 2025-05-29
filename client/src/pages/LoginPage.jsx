@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router";
-import { loginUser, googleLogin, clearError } from "../store/slices/authSlice";
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router';
+import { loginUser, googleLogin, clearError } from '../store/slices/authSlice';
+import Swal from 'sweetalert2';
+
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -93,57 +95,154 @@ const LoginPage = () => {
     };
   }, [dispatch]);
 
+  const [fieldErrors, setFieldErrors] = useState({});
+  
+  const validateField = (name, value) => {
+    const errors = { ...fieldErrors };
+    
+    switch (name) {
+      case 'email':
+        if (!value) {
+          errors.email = 'Email harus diisi';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          errors.email = 'Format email tidak valid';
+        } else {
+          delete errors.email;
+        }
+        break;
+      case 'password':
+        if (!value) {
+          errors.password = 'Password harus diisi';
+        } else if (value.length < 6) {
+          errors.password = 'Password minimal 6 karakter';
+        } else {
+          delete errors.password;
+        }
+        break;
+    }
+    
+    setFieldErrors(errors);
+  };
+  
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+    
+    // Validasi real-time
+    validateField(name, value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validasi required fields
+    if (!formData.email || !formData.password) {
+      await Swal.fire({
+        icon: 'warning',
+        title: 'Form Tidak Lengkap',
+        text: 'Silakan isi semua field yang diperlukan.',
+        html: `
+          <div style="text-align: left; margin-top: 10px;">
+            ${!formData.email ? '<p>• Email harus diisi</p>' : ''}
+            ${!formData.password ? '<p>• Password harus diisi</p>' : ''}
+          </div>
+        `,
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#10b981',
+        customClass: {
+          popup: 'swal-custom-popup',
+          title: 'swal-custom-title'
+        }
+      });
+      return;
+    }
+    
+    // Validasi format email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      await Swal.fire({
+        icon: 'error',
+        title: 'Format Email Salah',
+        text: 'Silakan masukkan email dengan format yang benar.',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#10b981'
+      });
+      return;
+    }
+    
+    // Validasi panjang password minimum
+    if (formData.password.length < 6) {
+      await Swal.fire({
+        icon: 'error',
+        title: 'Password Terlalu Pendek',
+        text: 'Password harus minimal 6 karakter.',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#10b981'
+      });
+      return;
+    }
+    
     dispatch(loginUser(formData));
   };
+
+  // Google Sign In Callback
+  // (removed duplicate handleGoogleCallback)
 
   // Google Sign In Handler
   const handleGoogleSignIn = async () => {
     try {
       setIsGoogleLoading(true);
 
+      const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+      if (!clientId) {
+        await Swal.fire({
+          icon: 'warning',
+          title: 'Konfigurasi Tidak Lengkap',
+          text: 'Google Client ID tidak ditemukan. Silakan gunakan email dan password.',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#10b981'
+        });
+        return;
+      }
+
       // Load Google Identity Services jika belum ada
-      if (typeof window.google === "undefined") {
-        // Load Google script dynamically
+      if (typeof window.google === 'undefined') {
         await loadGoogleScript();
       }
 
-      // Initialize Google Sign In
+      // Initialize Google Sign In dengan konfigurasi yang lebih lengkap
       window.google.accounts.id.initialize({
-        client_id:
-          import.meta.env.VITE_GOOGLE_CLIENT_ID || "your-google-client-id",
+        client_id: clientId,
         callback: handleGoogleCallback,
         auto_select: false,
         cancel_on_tap_outside: true,
+        use_fedcm_for_prompt: false,
       });
 
-      // Show Google Sign In prompt
-      window.google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          // Fallback: show one-tap dialog
-          window.google.accounts.id.renderButton(
-            document.getElementById("google-signin-button"),
-            {
-              theme: "outline",
-              size: "large",
-              width: "100%",
-            }
-          );
-        }
-      });
+      // Render button langsung tanpa prompt
+      const buttonDiv = document.getElementById('google-signin-button');
+      if (buttonDiv) {
+        buttonDiv.style.display = 'block';
+        window.google.accounts.id.renderButton(buttonDiv, {
+          theme: 'outline',
+          size: 'large',
+          width: '100%',
+          text: 'signin_with',
+          shape: 'rectangular',
+        });
+      }
     } catch (error) {
-      console.error("Google Sign In Error:", error);
-      alert(
-        "Gagal memuat Google Sign In. Silakan coba lagi atau gunakan email/password."
-      );
+      console.error('Google Sign In Error:', error);
+      await Swal.fire({
+        icon: 'error',
+        title: 'Gagal Memuat Google Sign In',
+        text: 'Silakan coba lagi atau gunakan email/password.',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#10b981'
+      });
     } finally {
       setIsGoogleLoading(false);
     }
@@ -278,7 +377,7 @@ const LoginPage = () => {
                 name="email"
                 type="email"
                 autoComplete="email"
-                required
+      
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Enter your email"
@@ -313,7 +412,7 @@ const LoginPage = () => {
                 name="password"
                 type="password"
                 autoComplete="current-password"
-                required
+              
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Enter your password"
@@ -535,51 +634,3 @@ style.textContent = `
 document.head.appendChild(style);
 
 export default LoginPage;
-// Google Sign In Handler
-const handleGoogleSignIn = async () => {
-  try {
-    setIsGoogleLoading(true);
-
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    if (!clientId) {
-      alert(
-        "Google Client ID tidak ditemukan. Silakan gunakan email dan password."
-      );
-      return;
-    }
-
-    // Load Google Identity Services jika belum ada
-    if (typeof window.google === "undefined") {
-      await loadGoogleScript();
-    }
-
-    // Initialize Google Sign In dengan konfigurasi yang lebih lengkap
-    window.google.accounts.id.initialize({
-      client_id: clientId,
-      callback: handleGoogleCallback,
-      auto_select: false,
-      cancel_on_tap_outside: true,
-      use_fedcm_for_prompt: false, // Disable FedCM untuk menghindari error
-    });
-
-    // Render button langsung tanpa prompt
-    const buttonDiv = document.getElementById("google-signin-button");
-    if (buttonDiv) {
-      buttonDiv.style.display = "block";
-      window.google.accounts.id.renderButton(buttonDiv, {
-        theme: "outline",
-        size: "large",
-        width: "100%",
-        text: "signin_with",
-        shape: "rectangular",
-      });
-    }
-  } catch (error) {
-    console.error("Google Sign In Error:", error);
-    alert(
-      "Gagal memuat Google Sign In. Silakan coba lagi atau gunakan email/password."
-    );
-  } finally {
-    setIsGoogleLoading(false);
-  }
-};

@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "express-session": "^1.18.1",
-    "googleapis": "^149.0.0"
-  }
-}

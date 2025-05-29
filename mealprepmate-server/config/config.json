@@ -18,6 +18,6 @@
     "password": "postgres",
     "database": "mealprepmate_prod",
     "host": "127.0.0.1",
-    "dialect": "mealprepmate"
+    "dialect": "postgres"
   }
 }

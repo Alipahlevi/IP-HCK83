@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import Swal from 'sweetalert2';
 import { getUserProfile, updateUserProfile, deleteUser } from "../store/slices/userSlice";
 import { logout } from "../store/slices/authSlice";

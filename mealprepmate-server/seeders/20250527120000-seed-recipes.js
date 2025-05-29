@@ -1,4 +1,6 @@
 'use strict';
+
+require('dotenv').config();
 const axios = require('axios');
 
 /** @type {import('sequelize-cli').Migration} */

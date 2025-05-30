@@ -64,3 +64,14 @@ describe("JWT Helper", () => {
     });
   });
 });
+
+// Jika belum ada, tambahkan test untuk discord helper
+const discord = require('../helpers/discord');
+
+describe('Discord Helper', () => {
+  it('should be defined', () => {
+    expect(discord).toBeDefined();
+  });
+  
+  // Tambahkan test sesuai dengan fungsi yang ada di discord helper
+});

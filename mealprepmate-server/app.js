@@ -8,7 +8,7 @@ const mealPlanRoutes = require("./routes/mealPlanRoutes");
 const errorHandler = require("./middlewares/errorHandler");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());

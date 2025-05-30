@@ -113,13 +113,52 @@ const authSlice = createSlice({
         state.error = action.payload;
         state.isAuthenticated = false;
 
-        // SweetAlert2 error notification
+        // SweetAlert2 error notification dengan pesan yang lebih spesifik
+        const errorMessage = action.payload || "Terjadi kesalahan saat login";
+
+        let title = "Login Gagal";
+        let text = errorMessage;
+        let icon = "error";
+
+        // Customize pesan berdasarkan jenis error
+        if (
+          errorMessage.toLowerCase().includes("invalid credentials") ||
+          errorMessage.toLowerCase().includes("email") ||
+          errorMessage.toLowerCase().includes("password")
+        ) {
+          title = "Email atau Password Salah";
+          text =
+            "Email atau password yang Anda masukkan tidak sesuai. Silakan periksa kembali dan coba lagi.";
+          icon = "warning";
+        } else if (
+          errorMessage.toLowerCase().includes("user not found") ||
+          errorMessage.toLowerCase().includes("not found")
+        ) {
+          title = "Akun Tidak Ditemukan";
+          text =
+            "Email yang Anda masukkan tidak terdaftar. Silakan daftar terlebih dahulu atau periksa kembali email Anda.";
+          icon = "info";
+        } else if (
+          errorMessage.toLowerCase().includes("network") ||
+          errorMessage.toLowerCase().includes("connection")
+        ) {
+          title = "Masalah Koneksi";
+          text =
+            "Tidak dapat terhubung ke server. Periksa koneksi internet Anda dan coba lagi.";
+          icon = "error";
+        }
+
         Swal.fire({
-          icon: "error",
-          title: "Login Gagal",
-          text: action.payload || "Terjadi kesalahan saat login",
+          icon: icon,
+          title: title,
+          text: text,
           confirmButtonText: "OK",
           confirmButtonColor: "#10b981",
+          customClass: {
+            popup: "swal-custom-popup",
+            title: "swal-custom-title",
+            content: "swal-custom-content",
+          },
         });
       })
       // Register

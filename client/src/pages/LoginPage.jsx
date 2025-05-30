@@ -143,6 +143,7 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validasi yang sudah ada...
     // Validasi required fields
     if (!formData.email || !formData.password) {
       await Swal.fire({
@@ -190,7 +191,13 @@ const LoginPage = () => {
       return;
     }
 
-    dispatch(loginUser(formData));
+    try {
+      await dispatch(loginUser(formData)).unwrap();
+      // Success akan ditangani di authSlice
+    } catch (error) {
+      // Error sudah ditangani di authSlice dengan SweetAlert
+      console.error("Login error:", error);
+    }
   };
 
   // Google Sign In Callback

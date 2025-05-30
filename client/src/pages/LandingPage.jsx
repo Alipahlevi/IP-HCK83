@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link, Navigate } from 'react-router';
-import { useSelector } from 'react-redux';
+import React from "react";
+import { Link, Navigate } from "react-router";
+import { useSelector } from "react-redux";
 
 const LandingPage = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -10,82 +10,104 @@ const LandingPage = () => {
   }
 
   const gradientStyle = {
-    background: 'var(--gradient-luxury)',
-    minHeight: '100vh'
+    background: "var(--gradient-luxury)",
+    minHeight: "100vh",
   };
 
   const cardStyle = {
-    background: 'rgba(255, 255, 255, 0.95)',
-    backdropFilter: 'blur(20px)',
-    borderRadius: '1.5rem',
-    boxShadow: 'var(--shadow-luxury)',
-    transition: 'all 0.3s ease',
-    border: '1px solid rgba(255, 255, 255, 0.2)'
+    background: "rgba(255, 255, 255, 0.95)",
+    backdropFilter: "blur(20px)",
+    borderRadius: "1.5rem",
+    boxShadow: "var(--shadow-luxury)",
+    transition: "all 0.3s ease",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
   };
 
   const buttonPrimaryStyle = {
-    background: 'var(--gradient-premium)',
-    color: 'white',
-    padding: '1.25rem 2.5rem',
-    borderRadius: '1rem',
-    fontWeight: '700',
-    border: 'none',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    boxShadow: 'var(--shadow-premium)',
-    transform: 'translateY(0)',
-    fontSize: '1.25rem',
-    fontFamily: 'Inter, sans-serif'
+    background: "var(--gradient-premium)",
+    color: "white",
+    padding: "1.25rem 2.5rem",
+    borderRadius: "1rem",
+    fontWeight: "700",
+    border: "none",
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+    boxShadow: "var(--shadow-premium)",
+    transform: "translateY(0)",
+    fontSize: "1.25rem",
+    fontFamily: "Inter, sans-serif",
   };
 
   const buttonSecondaryStyle = {
-    background: 'rgba(255, 255, 255, 0.15)',
-    backdropFilter: 'blur(15px)',
-    color: 'white',
-    padding: '1.25rem 2.5rem',
-    borderRadius: '1rem',
-    fontWeight: '600',
-    border: '1px solid rgba(255, 255, 255, 0.3)',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    fontSize: '1.25rem'
+    background: "rgba(255, 255, 255, 0.15)",
+    backdropFilter: "blur(15px)",
+    color: "white",
+    padding: "1.25rem 2.5rem",
+    borderRadius: "1rem",
+    fontWeight: "600",
+    border: "1px solid rgba(255, 255, 255, 0.3)",
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+    fontSize: "1.25rem",
   };
 
   return (
     <div style={gradientStyle}>
       {/* Navigation */}
-      <nav style={{
-        background: 'rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(15px)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.2)'
-      }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', height: '4rem', alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontSize: '2rem' }}>🍽️</span>
-                <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white', margin: 0 }}>MealPrepMate</h1>
+      <nav
+        style={{
+          background: "rgba(255, 255, 255, 0.1)",
+          backdropFilter: "blur(15px)",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
+        }}
+      >
+        <div
+          style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 1rem" }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              height: "4rem",
+              alignItems: "center",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+              >
+                <span style={{ fontSize: "2rem" }}>🍽️</span>
+                <h1
+                  style={{
+                    fontSize: "1.5rem",
+                    fontWeight: "bold",
+                    color: "white",
+                    margin: 0,
+                  }}
+                >
+                  MealPrepMate
+                </h1>
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
               <Link
                 to="/login"
                 style={{
-                  color: 'rgba(255, 255, 255, 0.9)',
-                  padding: '0.5rem 1rem',
-                  borderRadius: '0.5rem',
-                  textDecoration: 'none',
-                  fontSize: '0.875rem',
-                  fontWeight: '500',
-                  transition: 'all 0.3s ease'
+                  color: "rgba(255, 255, 255, 0.9)",
+                  padding: "0.5rem 1rem",
+                  borderRadius: "0.5rem",
+                  textDecoration: "none",
+                  fontSize: "0.875rem",
+                  fontWeight: "500",
+                  transition: "all 0.3s ease",
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.background = 'rgba(255, 255, 255, 0.1)';
-                  e.target.style.color = 'white';
+                  e.target.style.background = "rgba(255, 255, 255, 0.1)";
+                  e.target.style.color = "white";
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.background = 'transparent';
-                  e.target.style.color = 'rgba(255, 255, 255, 0.9)';
+                  e.target.style.background = "transparent";
+                  e.target.style.color = "rgba(255, 255, 255, 0.9)";
                 }}
               >
                 Login
@@ -93,25 +115,27 @@ const LandingPage = () => {
               <Link
                 to="/register"
                 style={{
-                  background: 'white',
-                  color: '#10b981',
-                  padding: '0.5rem 1.5rem',
-                  borderRadius: '0.5rem',
-                  textDecoration: 'none',
-                  fontSize: '0.875rem',
-                  fontWeight: '600',
-                  transition: 'all 0.3s ease',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                  background: "white",
+                  color: "#10b981",
+                  padding: "0.5rem 1.5rem",
+                  borderRadius: "0.5rem",
+                  textDecoration: "none",
+                  fontSize: "0.875rem",
+                  fontWeight: "600",
+                  transition: "all 0.3s ease",
+                  boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.background = '#f3f4f6';
-                  e.target.style.transform = 'translateY(-2px)';
-                  e.target.style.boxShadow = '0 8px 15px -3px rgba(0, 0, 0, 0.2)';
+                  e.target.style.background = "#f3f4f6";
+                  e.target.style.transform = "translateY(-2px)";
+                  e.target.style.boxShadow =
+                    "0 8px 15px -3px rgba(0, 0, 0, 0.2)";
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.background = 'white';
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+                  e.target.style.background = "white";
+                  e.target.style.transform = "translateY(0)";
+                  e.target.style.boxShadow =
+                    "0 4px 6px -1px rgba(0, 0, 0, 0.1)";
                 }}
               >
                 Get Started
@@ -122,67 +146,88 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '5rem 1rem' }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ marginBottom: '2rem' }}>
-            <span style={{ fontSize: '4rem', marginBottom: '1rem', display: 'block' }}>👨‍🍳</span>
-            <h1 style={{
-              fontSize: '3.75rem',
-              fontWeight: 'bold',
-              color: 'white',
-              marginBottom: '1.5rem',
-              lineHeight: '1.1',
-              margin: 0
-            }}>
+      <div
+        style={{ maxWidth: "1280px", margin: "0 auto", padding: "5rem 1rem" }}
+      >
+        <div style={{ textAlign: "center" }}>
+          <div style={{ marginBottom: "2rem" }}>
+            <span
+              style={{
+                fontSize: "4rem",
+                marginBottom: "1rem",
+                display: "block",
+              }}
+            >
+              👨‍🍳
+            </span>
+            <h1
+              style={{
+                fontSize: "3.75rem",
+                fontWeight: "bold",
+                color: "white",
+                marginBottom: "1.5rem",
+                lineHeight: "1.1",
+                margin: 0,
+              }}
+            >
               Cook Smart with
-              <span style={{
-                display: 'block',
-                background: 'linear-gradient(to right, #fbbf24, #f97316)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}>
+              <span
+                style={{
+                  display: "block",
+                  background: "linear-gradient(to right, #fbbf24, #f97316)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
                 AI-Powered Recipes
               </span>
             </h1>
           </div>
-          
-          <p style={{
-            fontSize: '1.25rem',
-            color: 'rgba(255, 255, 255, 0.9)',
-            marginBottom: '3rem',
-            maxWidth: '48rem',
-            margin: '0 auto 3rem auto',
-            lineHeight: '1.7'
-          }}>
-            Transform your available ingredients into delicious meals! Our AI chef creates personalized recipes 
-            based on what's in your kitchen. No more food waste, just amazing flavors.
+
+          <p
+            style={{
+              fontSize: "1.25rem",
+              color: "rgba(255, 255, 255, 0.9)",
+              marginBottom: "3rem",
+              maxWidth: "48rem",
+              margin: "0 auto 3rem auto",
+              lineHeight: "1.7",
+            }}
+          >
+            Transform your available ingredients into delicious meals! Our AI
+            chef creates personalized recipes based on what's in your kitchen.
+            No more food waste, just amazing flavors.
           </p>
-          
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginBottom: '4rem'
-          }}>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem",
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom: "4rem",
+            }}
+          >
             <Link
               to="/register"
               style={{
                 ...buttonPrimaryStyle,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                textDecoration: 'none'
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                textDecoration: "none",
               }}
               onMouseEnter={(e) => {
-                e.target.style.transform = 'translateY(-3px)';
-                e.target.style.boxShadow = '0 20px 25px -5px rgba(16, 185, 129, 0.4)';
+                e.target.style.transform = "translateY(-3px)";
+                e.target.style.boxShadow =
+                  "0 20px 25px -5px rgba(16, 185, 129, 0.4)";
               }}
               onMouseLeave={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = '0 10px 15px -3px rgba(16, 185, 129, 0.3)';
+                e.target.style.transform = "translateY(0)";
+                e.target.style.boxShadow =
+                  "0 10px 15px -3px rgba(16, 185, 129, 0.3)";
               }}
             >
               <span>🚀</span>
@@ -192,16 +237,16 @@ const LandingPage = () => {
               to="/login"
               style={{
                 ...buttonSecondaryStyle,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                textDecoration: 'none'
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                textDecoration: "none",
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(255, 255, 255, 0.3)';
+                e.target.style.background = "rgba(255, 255, 255, 0.3)";
               }}
               onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+                e.target.style.background = "rgba(255, 255, 255, 0.2)";
               }}
             >
               <span>👋</span>
@@ -211,65 +256,132 @@ const LandingPage = () => {
         </div>
 
         {/* Features Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '2rem',
-          marginTop: '5rem'
-        }}>
-          <div style={{ ...cardStyle, padding: '2rem', textAlign: 'center' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🤖</div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#1f2937', marginBottom: '0.75rem' }}>AI-Powered Recipes</h3>
-            <p style={{ color: '#6b7280' }}>Our smart AI analyzes your ingredients and creates unique, delicious recipes tailored just for you.</p>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "2rem",
+            marginTop: "5rem",
+          }}
+        >
+          <div style={{ ...cardStyle, padding: "2rem", textAlign: "center" }}>
+            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🤖</div>
+            <h3
+              style={{
+                fontSize: "1.25rem",
+                fontWeight: "600",
+                color: "#1f2937",
+                marginBottom: "0.75rem",
+              }}
+            >
+              AI-Powered Recipes
+            </h3>
+            <p style={{ color: "#6b7280" }}>
+              Our smart AI analyzes your ingredients and creates unique,
+              delicious recipes tailored just for you.
+            </p>
           </div>
-          
-          <div style={{ ...cardStyle, padding: '2rem', textAlign: 'center' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🥗</div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#1f2937', marginBottom: '0.75rem' }}>Reduce Food Waste</h3>
-            <p style={{ color: '#6b7280' }}>Use up ingredients before they expire. Turn leftovers into gourmet meals with creative combinations.</p>
+
+          <div style={{ ...cardStyle, padding: "2rem", textAlign: "center" }}>
+            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🥗</div>
+            <h3
+              style={{
+                fontSize: "1.25rem",
+                fontWeight: "600",
+                color: "#1f2937",
+                marginBottom: "0.75rem",
+              }}
+            >
+              Reduce Food Waste
+            </h3>
+            <p style={{ color: "#6b7280" }}>
+              Use up ingredients before they expire. Turn leftovers into gourmet
+              meals with creative combinations.
+            </p>
           </div>
-          
-          <div style={{ ...cardStyle, padding: '2rem', textAlign: 'center' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚡</div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#1f2937', marginBottom: '0.75rem' }}>Quick & Easy</h3>
-            <p style={{ color: '#6b7280' }}>Get instant recipe suggestions in seconds. From quick snacks to elaborate dinners, we've got you covered.</p>
+
+          <div style={{ ...cardStyle, padding: "2rem", textAlign: "center" }}>
+            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>⚡</div>
+            <h3
+              style={{
+                fontSize: "1.25rem",
+                fontWeight: "600",
+                color: "#1f2937",
+                marginBottom: "0.75rem",
+              }}
+            >
+              Quick & Easy
+            </h3>
+            <p style={{ color: "#6b7280" }}>
+              Get instant recipe suggestions in seconds. From quick snacks to
+              elaborate dinners, we've got you covered.
+            </p>
           </div>
         </div>
       </div>
 
       {/* CTA Section */}
-      <div style={{
-        background: 'rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(10px)',
-        borderTop: '1px solid rgba(255, 255, 255, 0.2)',
-        padding: '4rem 0'
-      }}>
-        <div style={{ maxWidth: '64rem', margin: '0 auto', textAlign: 'center', padding: '0 1rem' }}>
-          <h2 style={{ fontSize: '2rem', fontWeight: 'bold', color: 'white', marginBottom: '1rem' }}>Ready to Transform Your Cooking?</h2>
-          <p style={{ color: 'rgba(255, 255, 255, 0.9)', marginBottom: '2rem', fontSize: '1.125rem' }}>Join thousands of home cooks who are already creating amazing meals with AI assistance.</p>
+      <div
+        style={{
+          background: "rgba(255, 255, 255, 0.1)",
+          backdropFilter: "blur(10px)",
+          borderTop: "1px solid rgba(255, 255, 255, 0.2)",
+          padding: "4rem 0",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "64rem",
+            margin: "0 auto",
+            textAlign: "center",
+            padding: "0 1rem",
+          }}
+        >
+          <h2
+            style={{
+              fontSize: "2rem",
+              fontWeight: "bold",
+              color: "white",
+              marginBottom: "1rem",
+            }}
+          >
+            Ready to Transform Your Cooking?
+          </h2>
+          <p
+            style={{
+              color: "rgba(255, 255, 255, 0.9)",
+              marginBottom: "2rem",
+              fontSize: "1.125rem",
+            }}
+          >
+            Join thousands of home cooks who are already creating amazing meals
+            with AI assistance.
+          </p>
           <Link
             to="/register"
             style={{
-              background: 'linear-gradient(135deg, #f97316, #ea580c)',
-              color: 'white',
-              padding: '1rem 2rem',
-              borderRadius: '0.75rem',
-              fontWeight: '600',
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              fontSize: '1.125rem',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 10px 15px -3px rgba(249, 115, 22, 0.3)'
+              background: "linear-gradient(135deg, #f97316, #ea580c)",
+              color: "white",
+              padding: "1rem 2rem",
+              borderRadius: "0.75rem",
+              fontWeight: "600",
+              textDecoration: "none",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              fontSize: "1.125rem",
+              transition: "all 0.3s ease",
+              boxShadow: "0 10px 15px -3px rgba(249, 115, 22, 0.3)",
             }}
             onMouseEnter={(e) => {
-              e.target.style.transform = 'translateY(-3px)';
-              e.target.style.boxShadow = '0 20px 25px -5px rgba(249, 115, 22, 0.4)';
+              e.target.style.transform = "translateY(-3px)";
+              e.target.style.boxShadow =
+                "0 20px 25px -5px rgba(249, 115, 22, 0.4)";
             }}
             onMouseLeave={(e) => {
-              e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = '0 10px 15px -3px rgba(249, 115, 22, 0.3)';
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow =
+                "0 10px 15px -3px rgba(249, 115, 22, 0.3)";
             }}
           >
             <span>✨</span>
@@ -283,37 +395,36 @@ const LandingPage = () => {
 
 export default LandingPage;
 
-
 // Tambahkan di bagian hero section
 const heroStyle = {
-  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
-  minHeight: '100vh',
-  position: 'relative',
-  overflow: 'hidden'
+  background: "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
+  minHeight: "100vh",
+  position: "relative",
+  overflow: "hidden",
 };
 
 const luxuryCardStyle = {
-  background: 'rgba(255, 255, 255, 0.1)',
-  backdropFilter: 'blur(20px)',
-  borderRadius: '2rem',
-  border: '1px solid rgba(255, 255, 255, 0.2)',
-  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-  padding: '3rem',
-  position: 'relative',
-  overflow: 'hidden'
+  background: "rgba(255, 255, 255, 0.1)",
+  backdropFilter: "blur(20px)",
+  borderRadius: "2rem",
+  border: "1px solid rgba(255, 255, 255, 0.2)",
+  boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+  padding: "3rem",
+  position: "relative",
+  overflow: "hidden",
 };
 
 // Tambahkan floating elements
 const FloatingElement = ({ delay = 0, size = 60 }) => (
   <div
     style={{
-      position: 'absolute',
+      position: "absolute",
       width: `${size}px`,
       height: `${size}px`,
-      background: 'rgba(255, 255, 255, 0.1)',
-      borderRadius: '50%',
+      background: "rgba(255, 255, 255, 0.1)",
+      borderRadius: "50%",
       animation: `luxuryFloat 3s ease-in-out infinite ${delay}s`,
-      backdropFilter: 'blur(10px)'
+      backdropFilter: "blur(10px)",
     }}
   />
 );
